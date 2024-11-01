@@ -1,5 +1,6 @@
 import pygame as pg
 import random
+from constants import RED
 
 
 class Grid:
@@ -29,30 +30,32 @@ class Grid:
         ]
         self.frontier = []
 
+    def getGrid(self):
+        return self.grid
+
+    def getObs(self):
+        obs = []
+        for row in self.grid:
+            for i in row:
+                if i != 0:
+                    obs.append(i)
+        return obs
+
     def render(self):
-        grX, grY = self.winSize
+        grX, grY = self.gridSize
 
         for y in range(int(grY)):
             for x in range(int(grX)):
                 cell = self.grid[y][x]
                 if cell == 0:
                     continue
-                pg.draw.rect(
-                    self.screen,
-                    (255, 255, 255),
-                    pg.Rect(
-                        x * self.blockSize,
-                        y * self.blockSize,
-                        self.blockSize,
-                        self.blockSize,
-                    ),
-                )
+                pg.draw.rect(self.screen, RED, cell)
 
-        for border in self.borders:
-            pg.draw.rect(self.screen, (0, 0, 0), border)
+        # for border in self.borders:
+        #     pg.draw.rect(self.screen, (0, 0, 0), border)
 
     def addFront(self, x, y):
-        grX, grY = self.winSize
+        grX, grY = self.gridSize
         for dx, dy in [(-2, 0), (2, 0), (0, -2), (0, 2)]:
             nx, ny = x + dx, y + dy
             if 0 <= nx < grX and 0 <= ny < grY and self.grid[ny][nx] == 1:
@@ -60,7 +63,7 @@ class Grid:
                     self.frontier.append((nx, ny))
 
     def getNeighbours(self, x, y):
-        grX, grY = self.winSize
+        grX, grY = self.gridSize
         neighbors = []
         for dx, dy in [(-2, 0), (2, 0), (0, -2), (0, 2)]:
             nx, ny = x + dx, y + dy
@@ -69,7 +72,7 @@ class Grid:
         return neighbors
 
     def getUnvisited(self, x, y):
-        grX, grY = self.winSize
+        grX, grY = self.gridSize
         ns = []
         directions = [(0, -2), (2, 0), (0, 2), (-2, 0)]  # Up, Right, Down, Left
 
@@ -81,7 +84,7 @@ class Grid:
         return ns
 
     def genMazeDFS(self):
-        grX, grY = self.winSize
+        grX, grY = self.gridSize
 
         stack = [(1, int(grY - 2))]
         self.grid[stack[0][1]][stack[0][0]] = 0
@@ -98,8 +101,18 @@ class Grid:
             else:
                 stack.pop()
 
+        for i in range(len(self.grid)):
+            for j in range(len(self.grid[0])):
+                if self.grid[i][j] == 1:
+                    self.grid[i][j] = pg.Rect(
+                        i * self.blockSize,
+                        j * self.blockSize,
+                        self.blockSize,
+                        self.blockSize,
+                    )
+
     def genMaze(self):
-        grX, grY = self.winSize
+        grX, grY = self.gridSize
         # sX, sY = (
         #     random.randint(0, int(self.winSize[0] - 1)),
         #     random.randint(0, int(self.winSize[1] - 1)),
