@@ -6,6 +6,7 @@ SCREEN_WIDTH = 1280
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
+DOCTOR_SIZE = (10, 10)
 
 TEMP_WALLS = [
     pygame.Rect(100, 100, 100, 20),

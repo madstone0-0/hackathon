@@ -5,14 +5,14 @@ from random import randint
 
 class Doctor:
     def __init__(self, x=0, y=0, speed=5, lives=2, grid=None):
-        self.rect = pygame.Rect(x, y, 10, 10)
+        self.rect = pygame.Rect(x, y, *DOCTOR_SIZE)
         self.speed = speed
         self.lives = lives
         self.grid = grid
 
     def initialize(self, walls):
         init_x, init_y = randint(2, SCREEN_WIDTH - 2), randint(2, SCREEN_HEIGHT - 2)
-        temp_rect = pygame.Rect(init_x, init_y, 10, 10)
+        temp_rect = pygame.Rect(init_x, init_y, DOCTOR_SIZE[0] - 2, DOCTOR_SIZE[1] - 2)
         width = walls[0].width
         print("Checking for collisions")
         collisons = 0
