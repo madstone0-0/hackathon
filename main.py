@@ -23,3 +23,8 @@ boxes[rng(4)].append(counter)
 
 for k, v in boxes.items():
     print(f"{k}: {v}")
+
+# Typing game bread apple
+# Doctor Maze looking in boxes (hidden, three), two lives, boxes are apples and bread. 
+# Doctor, Maze, Boxes, apples, bread
+# Randomly generated mazes
