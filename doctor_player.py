@@ -9,14 +9,14 @@ class Doctor:
         
     def initialize(self, walls):
         init_x, init_y = 0, SCREEN_HEIGHT
-        temp_rect = pygame.Rect(init_x, init_y, 50, 50)
+        temp_rect = pygame.Rect(init_x, init_y, 20, 20)
         width = walls[0].width
         while any(temp_rect.colliderect(wall) for wall in TEMP_WALLS):
                 temp_rect.x+width
         self.rect = temp_rect
 
 
-    def move(self, walls = None):
+    def move(self, walls = None, boxes = None):
         keys = pygame.key.get_pressed() 
         dx, dy = 0,0
         if keys[pygame.K_LEFT]:
@@ -38,12 +38,14 @@ class Doctor:
         self.rect.x = max(0, min(self.rect.x, SCREEN_WIDTH - self.rect.width))
         self.rect.y = max(0, min(self.rect.y, SCREEN_HEIGHT - self.rect.height))
 
+        #check if we have collided with a box
+        for i in range(len(boxes)):
+            if self.rect.colliderect(boxes[i]):
+                if boxes[i].isApple:
+                    self.lives -=1
+                else:
+                    self.lives+=1
+                boxes.pop(i)
     
     def draw(self, surface):
         pygame.draw.rect(surface, WHITE, self.rect)
-
-    def die(self):
-        self.lives -=1
-    
-    def revive(self):
-        self.lives+=1
