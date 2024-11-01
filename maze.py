@@ -13,13 +13,8 @@ class Grid:
             dimens = ()
             if (i + 1) % 2 == 0:
                 dimens = (self.winSize[0], self.blockSize)
-                pg.draw.rect(
-                    self.screen,
-                    (255, 0, 0),
-                    pg.Rect(width=self.winSize[0], height=self.blockSize),
-                )
             else:
-                eimens = (self.winSize[0], self.blockSize)
+                dimens = (self.blockSize, self.winSize[1])
                 pg.draw.rect(
                     self.screen,
                     (255, 0, 0),
