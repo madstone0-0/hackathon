@@ -17,11 +17,13 @@ print("Done generating maze")
 
 
 obs = grid.getObs()
+boxes = grid.boxes
 print("Done getting objects")
 doctor = Doctor(grid=obs)
 doctor.initialize(obs)
+hasBoxesPlaced = False
 
-#setting up font
+# setting up font
 font_size = 36
 font = pygame.font.SysFont(None, font_size)
 
@@ -33,13 +35,17 @@ while running:
     # Update
     # Render
     # Update player position with collision detection
-    doctor.move(obs)
+    doctor.move(obs, boxes)
 
     # Draw everything
     screen.fill(BLACK)
     grid.render()
     doctor.draw(screen)
-    lives_text = font.render(f"lives left: {doctor.lives}", True, WHITE) 
+    if not hasBoxesPlaced:
+        grid.placeBoxes()
+        hasBoxesPlaced = True
+
+    lives_text = font.render(f"lives left: {doctor.lives}", True, WHITE)
     text_x = SCREEN_WIDTH - lives_text.get_width() - 10  # 10 pixels from the right edge
     text_y = 10
     screen.blit(lives_text, (text_x, text_y))

@@ -1,6 +1,8 @@
 import pygame as pg
 import random
+from box import Box
 from constants import RED
+from main import rng
 
 
 class Grid:
@@ -28,10 +30,13 @@ class Grid:
             [1 for _ in range(int(self.winSize[0]))]
             for _ in range(int(self.winSize[1]))
         ]
-        self.frontier = []
+        self.boxes = []
 
     def getGrid(self):
         return self.grid
+
+    def getBoxes(self):
+        return self.boxes
 
     def getObs(self):
         obs = []
@@ -51,8 +56,8 @@ class Grid:
                     continue
                 pg.draw.rect(self.screen, RED, cell)
 
-        # for border in self.borders:
-        #     pg.draw.rect(self.screen, (0, 0, 0), border)
+        for box in self.boxes:
+            box.draw(self.screen)
 
     def addFront(self, x, y):
         grX, grY = self.gridSize
@@ -137,3 +142,13 @@ class Grid:
                 self.grid[ny][nx] = 0
 
                 self.addFront(fx, fy)
+
+    def placeBoxes(self):
+        grX, grY = self.winSize
+        while len(self.boxes) < 3:
+            x, y = rng(int(grX)), rng(int(grY))
+            tempRect = pg.Rect(x, y, 20, 20)
+            if not any(tempRect.colliderect(wall) for wall in self.getObs()):
+                box = Box(x, y)
+                self.boxes += [box]
+                self.grid[x][y] = box

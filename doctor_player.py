@@ -27,7 +27,7 @@ class Doctor:
         print("Done checking for collisions")
         self.rect = temp_rect
 
-    def move(self, walls=None, boxes = None):
+    def move(self, walls=None, boxes=None):
         keys = pygame.key.get_pressed()
         dx, dy = 0, 0
         if keys[pygame.K_LEFT]:
@@ -49,15 +49,16 @@ class Doctor:
         self.rect.x = max(0, min(self.rect.x, SCREEN_WIDTH - self.rect.width))
         self.rect.y = max(0, min(self.rect.y, SCREEN_HEIGHT - self.rect.height))
 
-        #check if we have collided with a box
+        # check if we have collided with a box
         if boxes:
             for i in range(len(boxes)):
                 if self.rect.colliderect(boxes[i]):
                     if boxes[i].isApple:
-                        self.lives -=1
+                        self.lives -= 1
                     else:
-                        self.lives+=1
+                        self.lives += 1
                     boxes.pop(i)
-    
+                    break
+
     def draw(self, surface):
         pygame.draw.rect(surface, WHITE, self.rect)
